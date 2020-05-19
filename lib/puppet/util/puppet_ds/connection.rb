@@ -53,10 +53,14 @@ module Puppet::Util::PuppetDs
     end
 
     def self.puppet_certs
+      filename = "#{Puppet.settings[:certname]}.pem"
+
       {
-        ca_file:     Puppet.settings[:cacert],
-        client_cert: OpenSSL::X509::Certificate.new(File.read(Puppet.settings[:hostcert])),
-        client_key:  OpenSSL::PKey.read(File.read(Puppet.settings[:hostprivkey])),
+        ca_file:     '/etc/puppetlabs/puppet/ssl/certs/ca.pem',
+        client_cert: OpenSSL::X509::Certificate.new(File.read(File.join('/etc/puppetlabs/puppet/ssl/certs',
+                                                                        filename))),
+        client_key:  OpenSSL::PKey.read(File.read(File.join('/etc/puppetlabs/puppet/ssl/private_keys',
+                                                            filename)))
       }
     end
 
